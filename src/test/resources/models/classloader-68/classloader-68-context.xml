@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:elasticsearch="http://www.pilato.fr/schema/elasticsearch"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.pilato.fr/schema/elasticsearch http://www.pilato.fr/schema/elasticsearch/elasticsearch-0.3.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Enable annotation configuration -->
+    <context:annotation-config/>
+
+    <util:properties id="esproperties" location="classpath:esnode-transport.properties"/>
+    <elasticsearch:node id="testNodeSettings" properties="esproperties" />
+
+    <util:properties id="esclientproperties" location="classpath:models/classloader-68/esclient-transport.properties"/>
+
+    <bean id="esProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="cluster.name">junit.cluster.transport</prop>
+                <prop key="client.transport.sniff">false</prop>
+            </props>
+        </property>
+    </bean>
+
+    <elasticsearch:client id="esClient" esNodes="localhost:9300" properties="esProperties"/>
+
+</beans>
